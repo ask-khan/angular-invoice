@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { RouterModule, Routes } from '@angular/router';
 
 // 1. Import the libs you need
 import { AngularFireModule } from '@angular/fire';
@@ -12,6 +13,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 
+
+const routes: Routes = [
+  { path: 'heroes', component: LoginComponent }
+];
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -31,6 +36,7 @@ const firebaseConfig = {
     SignupComponent
   ],
   imports: [
+    RouterModule.forRoot(routes),
     BrowserModule,
     NgbModule,
     FormsModule,
@@ -40,7 +46,8 @@ const firebaseConfig = {
      AngularFireAuthModule, // auth
      AngularFireStorageModule // storage
   ],
-  providers: [],
+  exports: [RouterModule],
+  providers: [AngularFirestoreModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

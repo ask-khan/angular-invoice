@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { User } from './../shared/services/user'
 import { FirebaseAuthenicationService } from './../firebase-authenication.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +20,7 @@ export class SignupComponent implements OnInit {
   @Output() openSignIn = new EventEmitter<{ feature:String ,showLogin:boolean}>();
   
 
-  constructor() {}
+  constructor( public firebaseAuthenicationService:FirebaseAuthenicationService, firestore: AngularFirestore ) {}
 
   ngOnInit(): void {}
 
@@ -28,7 +29,8 @@ export class SignupComponent implements OnInit {
   }
 
   signUp() {
-    console.log( this.userInfo );
+    this.firebaseAuthenicationService.SignUp( this.userInfo.email, this.userInfo.password );
+    // console.log( this.userInfo );
     
   }
 

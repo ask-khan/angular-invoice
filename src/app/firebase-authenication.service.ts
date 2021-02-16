@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { User } from './shared/services/user'
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class FirebaseAuthenicationService {
   userData: any; // Save logged in user data
 
   constructor(
     public afs: AngularFirestore,
-    public afd: AngularFirestoreDocument,
     public router: Router,
     public afAuth: AngularFireAuth
   ) { }
@@ -29,7 +29,7 @@ export class FirebaseAuthenicationService {
   }
 
   SetUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const userRef = this.afs.doc(`users/${user.uid}`);
     const userData: User = {
       uid: user.uid,
       email: user.email,
@@ -54,11 +54,11 @@ export class FirebaseAuthenicationService {
       })
   }
 
-   // Send email verfificaiton when new user sign up
-   async  SendVerificationMail() {
+  // Send email verfificaiton when new user sign up
+  async SendVerificationMail() {
     return (await this.afAuth.currentUser).sendEmailVerification()
-    .then(() => {
-      this.router.navigate(['verify-email-address']);
-    })
+      .then(() => {
+        this.router.navigate(['verify-email-address']);
+      })
   }
 }

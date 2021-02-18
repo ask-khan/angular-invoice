@@ -1,64 +1,79 @@
 import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { User } from './shared/services/user'
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 
 export class FirebaseAuthenicationService {
-  userData: any; // Save logged in user data
+	userData: any; // Save logged in user data
 
-  constructor(
-    public afs: AngularFirestore,
-    public router: Router,
-    public afAuth: AngularFireAuth
-  ) { }
+	constructor(
+		public afs: AngularFirestore,
+		public router: Router,
+		public afAuth: AngularFireAuth
+	) {
+		/* Saving user data in localstorage when 
+	logged in and setting up null when logged out */
+		this.afAuth.authState.subscribe(user => {
+			if (user) {
+				this.userData = user;
+				localStorage.setItem('user', JSON.stringify(this.userData));
+				JSON.parse(localStorage.getItem('user'));
+			} else {
+				localStorage.setItem('user', null);
+				JSON.parse(localStorage.getItem('user'));
+			}
+		})
+	}
 
-  // Sign in with email/password
-  SignIn(email, password) {
-    return this.afAuth.signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.SetUserData(result.user);
-      }).catch((error) => {
-        window.alert(error.message)
-      })
-  }
+	// Sign in with email/password
+	SignIn(email, password) {
+		return this.afAuth.signInWithEmailAndPassword(email, password)
+			.then((result) => {
+				console.log( result );
+				this.SetUserData(result.user);
+				//this.router.navigate(['verify-email-address']);
+			}).catch((error) => {
+				window.alert(error.message)
+			})
+	}
 
-  SetUserData(user) {
-    const userRef = this.afs.doc(`users/${user.uid}`);
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      name: user.name,
-      password: user.password
-    }
-    return userRef.set(userData, {
-      merge: true
-    })
-  }
+	SetUserData(user) {
+		const userRef = this.afs.collection('users').doc(user.uid);
+		const userData: User = {
+			uid: user.uid,
+			email: user.email,
+			name: user.displayName,
+			password: null
+		}
+		console.log( userData );
+		return userRef.set(userData, {
+		 	merge: true
+		});
+	}
 
-  // Sign up with email/password
-  SignUp(email, password) {
-    return this.afAuth.createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        /* Call the SendVerificaitonMail() function when new user sign 
-        up and returns promise */
-        this.SendVerificationMail();
-        this.SetUserData(result.user);
-      }).catch((error) => {
-        window.alert(error.message)
-      })
-  }
+	// Sign up with email/password
+	SignUp(email, password) {
+		return this.afAuth.createUserWithEmailAndPassword(email, password)
+			.then((result) => {
+				/* Call the SendVerificaitonMail() function when new user sign 
+				up and returns promise */
+				this.SendVerificationMail();
+				this.SetUserData(result.user);
+			}).catch((error) => {
+				window.alert(error.message)
+			})
+	}
 
-  // Send email verfificaiton when new user sign up
-  async SendVerificationMail() {
-    return (await this.afAuth.currentUser).sendEmailVerification()
-      .then(() => {
-        this.router.navigate(['verify-email-address']);
-      })
-  }
+	// Send email verfificaiton when new user sign up
+	async SendVerificationMail() {
+		return (await this.afAuth.currentUser).sendEmailVerification()
+			.then(() => {
+				this.router.navigate(['verify-email-address']);
+			})
+	}
 }

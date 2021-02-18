@@ -12,10 +12,12 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
-  { path: 'heroes', component: LoginComponent }
+  { path: 'heroes', component: LoginComponent },
+  { path: 'dashoard', component: DashboardComponent }
 ];
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -33,7 +35,8 @@ const firebaseConfig = {
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    DashboardComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

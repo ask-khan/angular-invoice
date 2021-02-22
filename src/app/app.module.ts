@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { RouterModule, Routes } from '@angular/router';
+import { MustMatchDirective } from './../_helpers/must-match.directive'
 
 // 1. Import the libs you need
 import { AngularFireModule } from '@angular/fire';
@@ -16,8 +17,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
-  { path: 'heroes', component: LoginComponent },
-  { path: 'dashoard', component: DashboardComponent }
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -36,7 +39,8 @@ const firebaseConfig = {
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    MustMatchDirective
   ],
   imports: [
     RouterModule.forRoot(routes),

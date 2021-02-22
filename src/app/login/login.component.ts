@@ -11,16 +11,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class LoginComponent implements OnInit {
 	email: string;
 	password: string;
-	@Input() isLogin: boolean; // decorate the property with @Input()
-	@Output() openSignUp = new EventEmitter<{ feature: String, showSign: boolean }>();
-
+	
 	constructor(public firebaseAuthenicationService: FirebaseAuthenicationService, firestore: AngularFirestore) { }
 
 	ngOnInit(): void { }
-
-	showSignUpForm(showSignUp: boolean) {
-		this.openSignUp.emit({ feature: 'Login', showSign: showSignUp });
-	}
 
 	signIn() {
 		this.firebaseAuthenicationService.SignIn(this.email, this.password);

@@ -34,9 +34,9 @@ export class FirebaseAuthenicationService {
 	SignIn(email, password) {
 		return this.afAuth.signInWithEmailAndPassword(email, password)
 			.then((result) => {
-				console.log( result );
+				console.log(result);
 				this.SetUserData(result.user);
-				//this.router.navigate(['verify-email-address']);
+				this.router.navigate(['dashboard']);
 			}).catch((error) => {
 				window.alert(error.message)
 			})
@@ -50,10 +50,24 @@ export class FirebaseAuthenicationService {
 			name: user.displayName,
 			password: null
 		}
-		console.log( userData );
+		
 		return userRef.set(userData, {
-		 	merge: true
+			merge: true
 		});
+	}
+
+	// Sign out 
+	SignOut() {
+		return this.afAuth.signOut().then(() => {
+			localStorage.removeItem('user');
+			this.router.navigate(['/']);
+		})
+	}
+
+	// Returns true when user is looged in and email is verified
+	get isLoggedIn(): boolean {
+		const user = JSON.parse(localStorage.getItem('user'));
+		return (user !== null) ? true : false;
 	}
 
 	// Sign up with email/password

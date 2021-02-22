@@ -1,19 +1,47 @@
 <div class="container" id="container">
 	<div class="form-container sign-up-container">
-		<div class="sign-up-form">
+		<form class="sign-up-form" name="form" (ngSubmit)="f.form.valid && signUp()" #f="ngForm" [mustMatch]="['password', 'confirmPassword']" novalidate>
 			<h1>Create Account</h1>
-			<input type="text" [(ngModel)]="userInfo.name" placeholder="Name" />
-			<input type="email" [(ngModel)]="userInfo.email"  placeholder="Email" />
-			<input type="password" [(ngModel)]="userInfo.password"  placeholder="Password" />
-			<button (click)="signUp()" >Sign Up</button>
-		</div>
+			<div class="form-group">
+				<input type="text" name="Name" class="form-control" [(ngModel)]="userInfo.name" #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" placeholder="Name" required/>
+				<div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+					<div *ngIf="name.errors.required">First Name is required</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="email" name="Email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [(ngModel)]="userInfo.email" #email="ngModel" [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"  placeholder="Email" required/>
+				<div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
+					<div *ngIf="email.touched && email.errors.required">Email is required</div>
+					<div *ngIf="email.touched && email.errors?.pattern">Email must be a valid email address</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<input type="password" name="password" class="form-control" [(ngModel)]="userInfo.password" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.invalid }"  required minlength="6" placeholder="Password" />
+				<div *ngIf="f.submitted && password.invalid" class="invalid-feedback">
+					<div *ngIf="password.errors.required">Password is required</div>
+					<div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<input type="password" name="confirmPassword" class="form-control" name="confirmPassword" [(ngModel)]="userInfo.confirmPassword" #confirmPassword="ngModel" [ngClass]="{ 'is-invalid': f.submitted && confirmPassword.invalid }" minlength="6" placeholder="Password" required />
+				<div *ngIf="f.submitted && confirmPassword.invalid" class="invalid-feedback">
+					<div *ngIf="confirmPassword.errors.required">Confirm Password is required</div>
+					<div *ngIf="confirmPassword.errors.mustMatch">Confirm Passwords must match</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<button>Sign Up</button>
+			</div>
+		</form>
 	</div>
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-right">
 				<h1>Welcome Back!</h1>
 				<p>To keep connected with us please login with your personal info</p>
-				<button (click)=showLoginForm(true); class="ghost" id="signIn">Sign In</button>
+				<button routerLink="/login" class="ghost" id="signIn">Sign In</button>
 			</div>
 		</div>
 	</div>

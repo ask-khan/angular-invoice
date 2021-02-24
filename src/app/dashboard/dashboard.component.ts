@@ -12,9 +12,9 @@ export class DashboardComponent implements OnInit {
   constructor( public firebaseAuthenicationService: FirebaseAuthenicationService, private router: Router  ) { }
 
   ngOnInit(): void {
-
+    console.log( this.firebaseAuthenicationService.isLoggedIn );
     if ( this.firebaseAuthenicationService.isLoggedIn != true ) {
-      this.router = undefined
+      this.router.navigate(['login']);
     } 
   }
 

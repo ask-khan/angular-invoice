@@ -34,7 +34,6 @@ export class FirebaseAuthenicationService {
 	SignIn(email, password) {
 		return this.afAuth.signInWithEmailAndPassword(email, password)
 			.then((result) => {
-				console.log(result);
 				this.SetUserData(result.user);
 				this.router.navigate(['dashboard']);
 			}).catch((error) => {

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FirebaseAuthenicationService } from './../firebase-authenication.service';
+import { userLogin, MustMatch } from './../shared/services/user'
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
@@ -9,17 +10,16 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 
 export class LoginComponent implements OnInit {
-	email: string;
-	password: string;
+	userInfo = new userLogin();
 	
 	constructor(public firebaseAuthenicationService: FirebaseAuthenicationService, firestore: AngularFirestore) { }
 
 	ngOnInit(): void { }
 
 	signIn() {
-		this.firebaseAuthenicationService.SignIn(this.email, this.password);
-		this.email = "";
-		this.password = "";
+		this.firebaseAuthenicationService.SignIn(this.userInfo.email, this.userInfo.password);
+		// this.email = "";
+		// this.password = "";
 	}
 
 

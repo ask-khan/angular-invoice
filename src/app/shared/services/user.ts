@@ -7,6 +7,11 @@ export class User {
     public confirmPassword?: string;
 }
 
+export class userLogin {
+    public email?: string;
+    public password?:string;
+}
+
 // custom validator to check that two fields match
 export function MustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
